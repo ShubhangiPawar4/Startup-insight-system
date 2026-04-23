@@ -1,27 +1,24 @@
-# Workspace
+# Startup Insight Engine
 
-## Overview
-
-pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.
+Full-stack AI-assisted startup analysis tool. A user submits a rough idea; six LangGraph agents (context_builder → market_insight → competitor_mapper → business_structurer → risk_analyzer → pitch_writer) collaborate to produce an Insight Report, MVP Plan, and Pitch Draft. Includes a human-in-the-loop confirmation step after context extraction and a vague-idea refinement loop.
 
 ## Stack
+- pnpm monorepo, TypeScript everywhere
+- Backend: Express + LangGraph.js + ChatOpenAI (gpt-5-mini via Replit AI proxy) + Drizzle/Postgres
+- Frontend: React + Vite + wouter + shadcn/ui + framer-motion + react-query (orval-generated hooks)
+- Visual: dark navy + gold + mint, DM Serif Display / Syne / DM Mono
 
-- **Monorepo tool**: pnpm workspaces
-- **Node.js version**: 24
-- **Package manager**: pnpm
-- **TypeScript version**: 5.9
-- **API framework**: Express 5
-- **Database**: PostgreSQL + Drizzle ORM
-- **Validation**: Zod (`zod/v4`), `drizzle-zod`
-- **API codegen**: Orval (from OpenAPI spec)
-- **Build**: esbuild (CJS bundle)
+## Artifacts
+- `artifacts/api-server` — REST API + agent pipeline
+- `artifacts/insight-engine` — web UI (mounted at `/`)
+- `artifacts/mockup-sandbox` — design playground
 
-## Key Commands
+## Key files
+- `artifacts/api-server/src/lib/{graph,agents,schemas,runStore,orchestrator,llm}.ts`
+- `artifacts/api-server/src/routes/insights.ts`
+- `lib/db/src/schema/insightRuns.ts`
+- `lib/api-spec/openapi.yaml` (regen via `pnpm --filter @workspace/api-spec run codegen`)
+- `artifacts/insight-engine/src/pages/{home,runs,run-details}.tsx`
 
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- `pnpm --filter @workspace/api-server run dev` — run API server locally
-
-See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.
+## Pipeline state
+LangGraph StateGraph with MemorySaver checkpointer; `interrupt()` after context_builder; resume via `Command({ resume: { context } })` keyed on run id as `thread_id`.

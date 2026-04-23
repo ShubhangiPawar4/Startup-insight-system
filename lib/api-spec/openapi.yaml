@@ -1,22 +1,22 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Startup Insight & Planning API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: insights
+    description: Startup insight pipeline operations
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +24,134 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /insights:
+    get:
+      operationId: listInsights
+      tags: [insights]
+      summary: List all startup insight runs
+      responses:
+        "200":
+          description: List of insight runs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InsightSummary"
+    post:
+      operationId: startInsight
+      tags: [insights]
+      summary: Start a new startup insight pipeline
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StartInsightBody"
+      responses:
+        "201":
+          description: Insight run created and context-builder executed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InsightRun"
+
+  /insights/{id}:
+    get:
+      operationId: getInsight
+      tags: [insights]
+      summary: Get a startup insight run
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Insight run
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InsightRun"
+    delete:
+      operationId: deleteInsight
+      tags: [insights]
+      summary: Delete a startup insight run
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+
+  /insights/{id}/confirm:
+    post:
+      operationId: confirmInsightContext
+      tags: [insights]
+      summary: Confirm or correct the structured context, then resume the pipeline
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfirmContextBody"
+      responses:
+        "200":
+          description: Pipeline resumed and full analysis produced
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InsightRun"
+
+  /insights/{id}/refine:
+    post:
+      operationId: refineInsightContext
+      tags: [insights]
+      summary: Provide more detail when the context-builder asks for clarification
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefineContextBody"
+      responses:
+        "200":
+          description: Context-builder re-run with new detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InsightRun"
+
+  /insights/stats:
+    get:
+      operationId: getInsightStats
+      tags: [insights]
+      summary: Get aggregate stats across all insight runs
+      responses:
+        "200":
+          description: Aggregate stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InsightStats"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +159,257 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    StartInsightBody:
+      type: object
+      properties:
+        idea:
+          type: string
+          minLength: 5
+          description: Raw startup idea text
+      required: [idea]
+
+    ConfirmContextBody:
+      type: object
+      properties:
+        context:
+          $ref: "#/components/schemas/StartupContext"
+      required: [context]
+
+    RefineContextBody:
+      type: object
+      properties:
+        addendum:
+          type: string
+          minLength: 3
+          description: Extra detail to merge into the original idea
+      required: [addendum]
+
+    StartupContext:
+      type: object
+      properties:
+        name:
+          type: string
+        targetUser:
+          type: string
+        problem:
+          type: string
+        solution:
+          type: string
+        category:
+          type: string
+        keywords:
+          type: array
+          items:
+            type: string
+      required: [targetUser, problem, solution]
+
+    MarketInsight:
+      type: object
+      properties:
+        marketSize:
+          type: string
+        growthTrend:
+          type: string
+        keyTrends:
+          type: array
+          items:
+            type: string
+        targetSegments:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              description: { type: string }
+            required: [name, description]
+        opportunityScore:
+          type: integer
+        opportunityRationale:
+          type: string
+      required: [marketSize, growthTrend, keyTrends, targetSegments, opportunityScore, opportunityRationale]
+
+    Competitor:
+      type: object
+      properties:
+        name: { type: string }
+        category: { type: string }
+        strengths:
+          type: array
+          items: { type: string }
+        weaknesses:
+          type: array
+          items: { type: string }
+      required: [name, category, strengths, weaknesses]
+
+    CompetitorMap:
+      type: object
+      properties:
+        competitors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Competitor"
+        differentiation:
+          type: string
+        positioning:
+          type: string
+      required: [competitors, differentiation, positioning]
+
+    BusinessStructure:
+      type: object
+      properties:
+        valueProposition: { type: string }
+        revenueStreams:
+          type: array
+          items: { type: string }
+        pricingModel: { type: string }
+        keyChannels:
+          type: array
+          items: { type: string }
+        keyResources:
+          type: array
+          items: { type: string }
+        mvpFeatures:
+          type: array
+          items:
+            type: object
+            properties:
+              feature: { type: string }
+              priority:
+                type: string
+                enum: [must, should, could]
+              rationale: { type: string }
+            required: [feature, priority, rationale]
+        successMetrics:
+          type: array
+          items: { type: string }
+      required: [valueProposition, revenueStreams, pricingModel, keyChannels, keyResources, mvpFeatures, successMetrics]
+
+    Risk:
+      type: object
+      properties:
+        category:
+          type: string
+          enum: [market, technical, regulatory, financial, execution, competitive]
+        description: { type: string }
+        severity:
+          type: string
+          enum: [low, medium, high]
+        mitigation: { type: string }
+      required: [category, description, severity, mitigation]
+
+    RiskAnalysis:
+      type: object
+      properties:
+        risks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Risk"
+        overallRiskScore:
+          type: integer
+        summary: { type: string }
+      required: [risks, overallRiskScore, summary]
+
+    PitchDraft:
+      type: object
+      properties:
+        oneLiner: { type: string }
+        elevatorPitch: { type: string }
+        problem: { type: string }
+        solution: { type: string }
+        market: { type: string }
+        traction: { type: string }
+        ask: { type: string }
+        slides:
+          type: array
+          items:
+            type: object
+            properties:
+              title: { type: string }
+              body: { type: string }
+            required: [title, body]
+      required: [oneLiner, elevatorPitch, problem, solution, market, traction, ask, slides]
+
+    AgentNodeStatus:
+      type: object
+      properties:
+        node:
+          type: string
+          enum: [context_builder, market_insight, competitor_mapper, business_structurer, risk_analyzer, pitch_writer]
+        status:
+          type: string
+          enum: [pending, running, complete, error, awaiting_input]
+        message: { type: string }
+        startedAt: { type: string }
+        completedAt: { type: string }
+      required: [node, status]
+
+    InsightRun:
+      type: object
+      properties:
+        id: { type: string }
+        idea: { type: string }
+        status:
+          type: string
+          enum: [building_context, awaiting_confirmation, needs_refinement, analyzing, complete, error]
+        currentNode:
+          type: string
+        contextNeedsRefinement:
+          type: boolean
+        refinementQuestion:
+          type: string
+        nodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/AgentNodeStatus"
+        context:
+          $ref: "#/components/schemas/StartupContext"
+        market:
+          $ref: "#/components/schemas/MarketInsight"
+        competitors:
+          $ref: "#/components/schemas/CompetitorMap"
+        business:
+          $ref: "#/components/schemas/BusinessStructure"
+        risks:
+          $ref: "#/components/schemas/RiskAnalysis"
+        pitch:
+          $ref: "#/components/schemas/PitchDraft"
+        createdAt: { type: string }
+        updatedAt: { type: string }
+      required: [id, idea, status, nodes, createdAt, updatedAt]
+
+    InsightSummary:
+      type: object
+      properties:
+        id: { type: string }
+        idea: { type: string }
+        status: { type: string }
+        contextName: { type: string }
+        category: { type: string }
+        opportunityScore: { type: integer }
+        riskScore: { type: integer }
+        createdAt: { type: string }
+      required: [id, idea, status, createdAt]
+
+    InsightStats:
+      type: object
+      properties:
+        total: { type: integer }
+        completed: { type: integer }
+        inProgress: { type: integer }
+        avgOpportunity: { type: number }
+        avgRisk: { type: number }
+        topCategories:
+          type: array
+          items:
+            type: object
+            properties:
+              category: { type: string }
+              count: { type: integer }
+            required: [category, count]
+        recentRuns:
+          type: array
+          items:
+            $ref: "#/components/schemas/InsightSummary"
+      required: [total, completed, inProgress, avgOpportunity, avgRisk, topCategories, recentRuns]

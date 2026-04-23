@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Startup Insight Engine"
+version = "1.0.0"
+id = "artifacts/insight-engine"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18194
+
+[services.development]
+run = "pnpm --filter @workspace/insight-engine run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/insight-engine", "run", "build" ]
+publicDir = "artifacts/insight-engine/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18194"
+BASE_PATH = "/"

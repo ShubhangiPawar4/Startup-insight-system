@@ -1,0 +1,852 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap');
+
+  :root {
+    --brand: #1a1a2e;
+    --accent: #e8c547;
+    --accent2: #4ecca3;
+    --surface: #f8f7f2;
+    --ink: #1a1a1a;
+    --ink-soft: #5a5a5a;
+    --ink-muted: #9a9a9a;
+    --border: rgba(0,0,0,0.08);
+    --tag-bg: #1a1a2e;
+    --tag-fg: #e8c547;
+    --mono: 'DM Mono', monospace;
+    --serif: 'DM Serif Display', serif;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .root {
+    font-family: var(--sans);
+    background: var(--surface);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--brand);
+    padding: 3rem 2.5rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 1px solid rgba(232,197,71,0.15);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 1px solid rgba(78,204,163,0.1);
+  }
+
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent2);
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  .hero-title em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .hero-subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+  }
+
+  .hero-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 2rem;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    background: rgba(232,197,71,0.12);
+    color: var(--accent);
+    border: 0.5px solid rgba(232,197,71,0.3);
+    letter-spacing: 0.06em;
+  }
+  .tag.green {
+    background: rgba(78,204,163,0.1);
+    color: var(--accent2);
+    border-color: rgba(78,204,163,0.25);
+  }
+
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 0.5px solid rgba(255,255,255,0.06);
+  }
+  .meta-cell {
+    padding: 1rem;
+    background: rgba(255,255,255,0.03);
+  }
+  .meta-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .meta-value {
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+  }
+
+  /* BODY */
+  .body {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* SECTION */
+  .section-label {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-bottom: 1rem;
+  }
+  .section-label span {
+    background: var(--tag-bg);
+    color: var(--tag-fg);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+  .section-line {
+    flex: 1;
+    height: 0.5px;
+    background: var(--border);
+  }
+
+  /* OVERVIEW CARD */
+  .overview-card {
+    background: white;
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+  }
+  .overview-heading {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: var(--ink);
+  }
+  .overview-body {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.75;
+  }
+  .overview-body p + p { margin-top: 0.75rem; }
+
+  .highlight-box {
+    background: var(--brand);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-top: 1.25rem;
+    border-left: 3px solid var(--accent);
+  }
+  .highlight-box p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+  }
+  .highlight-box strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* PIPELINE */
+  .pipeline-wrapper {
+    background: white;
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+  }
+  .pipeline-title {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .pipeline-nodes {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .pnode {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 0 16px;
+    position: relative;
+  }
+  .pnode-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .pnode-dot {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--brand);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 500;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .pnode-line {
+    width: 1px;
+    flex: 1;
+    min-height: 16px;
+    background: rgba(26,26,46,0.15);
+    margin: 2px 0;
+  }
+  .pnode:last-child .pnode-line { display: none; }
+  .pnode-content {
+    padding-bottom: 1.25rem;
+  }
+  .pnode:last-child .pnode-content { padding-bottom: 0; }
+  .pnode-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .pnode-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .pnode-out {
+    display: inline-block;
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent2);
+    background: rgba(78,204,163,0.08);
+    border: 0.5px solid rgba(78,204,163,0.2);
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  /* AGENTS GRID */
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .agent-card {
+    background: white;
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .agent-card::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -8px; right: 12px;
+    font-family: var(--serif);
+    font-size: 4rem;
+    color: rgba(26,26,46,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .agent-icon {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    background: var(--brand);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 0.75rem;
+    font-size: 14px;
+  }
+  .agent-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+  .agent-desc {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .agent-outputs {
+    margin-top: 0.6rem;
+    display: flex; flex-wrap: wrap; gap: 4px;
+  }
+  .aout {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: rgba(26,26,46,0.05);
+    color: var(--ink-muted);
+  }
+
+  /* OUTPUT GRID */
+  .output-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .output-card {
+    background: var(--brand);
+    border-radius: 10px;
+    padding: 1.25rem;
+    color: white;
+  }
+  .output-card-icon {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .output-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .output-card-items {
+    list-style: none;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+  }
+  .output-card-items li::before {
+    content: '→ ';
+    color: var(--accent2);
+  }
+
+  /* TECH STACK */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .stack-card {
+    background: white;
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .stack-heading {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+    font-family: var(--mono);
+  }
+  .stack-items {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .stack-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .stack-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .stack-dot.green { background: var(--accent2); }
+
+  /* PROMPT BLOCK */
+  .prompt-block {
+    background: var(--brand);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .prompt-block::before {
+    content: '"';
+    position: absolute;
+    top: -20px; left: 20px;
+    font-family: var(--serif);
+    font-size: 10rem;
+    color: rgba(232,197,71,0.06);
+    line-height: 1;
+  }
+  .prompt-section-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 1.25rem;
+  }
+  .prompt-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.8;
+  }
+  .prompt-text strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .prompt-text em {
+    color: var(--accent2);
+    font-style: normal;
+  }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .feature-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: white;
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .feature-check {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(78,204,163,0.1);
+    border: 0.5px solid rgba(78,204,163,0.3);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .feature-check::after {
+    content: '';
+    width: 6px; height: 4px;
+    border-left: 1.5px solid var(--accent2);
+    border-bottom: 1.5px solid var(--accent2);
+    transform: rotate(-45deg) translateY(-1px);
+  }
+  .feature-text {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .feature-text strong { color: var(--ink); }
+
+  /* FOOTER */
+  .footer {
+    background: var(--brand);
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .footer-left {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.06em;
+  }
+  .footer-right {
+    display: flex; gap: 6px;
+  }
+  .footer-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    background: rgba(232,197,71,0.1);
+    color: var(--accent);
+    border: 0.5px solid rgba(232,197,71,0.2);
+  }
+</style>
+
+<h2 class="sr-only">AI-Assisted Startup Insight & Planning System — Full Project Specification and Generation Prompt</h2>
+
+<div class="root">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Project Specification Document</div>
+    <div class="hero-title">AI-Assisted Startup<br><em>Insight & Planning System</em></div>
+    <div class="hero-subtitle">// LangChain + LangGraph · Multi-Agent Pipeline · v1.0</div>
+    <div class="hero-tags">
+      <span class="tag">LangGraph</span>
+      <span class="tag">LangChain</span>
+      <span class="tag green">Multi-Agent</span>
+      <span class="tag green">RAG + Memory</span>
+      <span class="tag">Stateful Workflow</span>
+      <span class="tag green">FastAPI</span>
+      <span class="tag">React Frontend</span>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Project Type</div>
+        <div class="meta-value">Agentic AI System</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Agents</div>
+        <div class="meta-value">6 Specialized</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Output Artifacts</div>
+        <div class="meta-value">3 Documents</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- OVERVIEW -->
+    <div>
+      <div class="section-label"><span>01</span> Project Overview <div class="section-line"></div></div>
+      <div class="overview-card">
+        <div class="overview-heading">What This System Does</div>
+        <div class="overview-body">
+          <p>Build a full-stack AI-powered co-pilot that helps early-stage founders analyze, structure, and refine their startup ideas through a stateful, multi-agent reasoning pipeline. The system does not make promises — it produces structured, data-grounded insights that help founders make better decisions.</p>
+          <p>Unlike simple chatbots or generic LLM wrappers, this system uses LangGraph to orchestrate a directed acyclic graph of specialized agents, each responsible for one analytical layer of the startup analysis process.</p>
+        </div>
+        <div class="highlight-box">
+          <p><strong>Core Promise:</strong> "Here are insights, risks, and structured recommendations to help you make better decisions" — not "your idea will succeed." This distinction makes the system academically honest, practically useful, and demonstrates real understanding of responsible AI deployment.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PIPELINE -->
+    <div>
+      <div class="section-label"><span>02</span> LangGraph Agent Pipeline <div class="section-line"></div></div>
+      <div class="pipeline-wrapper">
+        <div class="pipeline-title">Stateful Workflow Graph</div>
+        <div class="pipeline-nodes">
+          <div class="pnode">
+            <div class="pnode-left"><div class="pnode-dot">IN</div><div class="pnode-line"></div></div>
+            <div class="pnode-content">
+              <div class="pnode-name">Idea Input Node</div>
+              <div class="pnode-desc">Raw founder input (text, voice, or structured form). Feeds into the shared LangGraph state object that persists across all downstream agents.</div>
+              <span class="pnode-out">→ raw_idea_state</span>
+            </div>
+          </div>
+          <div class="pnode">
+            <div class="pnode-left"><div class="pnode-dot">01</div><div class="pnode-line"></div></div>
+            <div class="pnode-content">
+              <div class="pnode-name">Context Builder Agent</div>
+              <div class="pnode-desc">Transforms vague or informal idea descriptions into a structured concept schema. Extracts target users, core problem statement, and the proposed solution. Prompts the founder with clarifying questions if critical fields are missing.</div>
+              <span class="pnode-out">→ structured_idea_schema</span>
+            </div>
+          </div>
+          <div class="pnode">
+            <div class="pnode-left"><div class="pnode-dot">02</div><div class="pnode-line"></div></div>
+            <div class="pnode-content">
+              <div class="pnode-name">Market Insight Agent</div>
+              <div class="pnode-desc">Retrieves and synthesizes industry context, demand indicators, and macro-level trends relevant to the idea's domain. Uses RAG over a curated knowledge base of industry reports, Crunchbase summaries, and market data.</div>
+              <span class="pnode-out">→ market_context_block</span>
+            </div>
+          </div>
+          <div class="pnode">
+            <div class="pnode-left"><div class="pnode-dot">03</div><div class="pnode-line"></div></div>
+            <div class="pnode-content">
+              <div class="pnode-name">Competitor Mapping Agent</div>
+              <div class="pnode-desc">Identifies existing solutions and players in the space. Maps positioning opportunities and differentiators. Uses web search tools + vector similarity over a startup database to find both direct and indirect competitors.</div>
+              <span class="pnode-out">→ competitor_landscape</span>
+            </div>
+          </div>
+          <div class="pnode">
+            <div class="pnode-left"><div class="pnode-dot">04</div><div class="pnode-line"></div></div>
+            <div class="pnode-content">
+              <div class="pnode-name">Business Structuring Agent</div>
+              <div class="pnode-desc">Suggests revenue models, value propositions, and a lean canvas framework tailored to the idea. Provides multiple business model options with trade-off analysis (e.g., SaaS vs. marketplace vs. freemium).</div>
+              <span class="pnode-out">→ lean_canvas_draft</span>
+            </div>
+          </div>
+          <div class="pnode">
+            <div class="pnode-left"><div class="pnode-dot">05</div><div class="pnode-line"></div></div>
+            <div class="pnode-content">
+              <div class="pnode-name">Risk & Assumption Analyzer</div>
+              <div class="pnode-desc">The system's honesty engine. Surfaces key uncertainties, execution risks, critical assumptions, and early-stage blind spots. Assigns a qualitative confidence tier (High / Medium / Low) to each insight with an explanation.</div>
+              <span class="pnode-out">→ risk_matrix + assumptions</span>
+            </div>
+          </div>
+          <div class="pnode">
+            <div class="pnode-left"><div class="pnode-dot">06</div><div class="pnode-line"></div></div>
+            <div class="pnode-content">
+              <div class="pnode-name">Pitch & Communication Agent</div>
+              <div class="pnode-desc">Synthesizes all prior agent outputs into a polished communication layer: a clear problem statement, a compelling value proposition, and a 30–60 second pitch script tailored to the founder's target audience.</div>
+              <span class="pnode-out">→ pitch_draft</span>
+            </div>
+          </div>
+          <div class="pnode">
+            <div class="pnode-left"><div class="pnode-dot">OUT</div><div class="pnode-line"></div></div>
+            <div class="pnode-content">
+              <div class="pnode-name">Final Report Assembler</div>
+              <div class="pnode-desc">Merges all agent outputs into three downloadable artifacts: Startup Insight Report, MVP Planning Guide, and Pitch Draft. Renders in-app and exports to PDF/Markdown.</div>
+              <span class="pnode-out">→ 3 downloadable artifacts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGENTS -->
+    <div>
+      <div class="section-label"><span>03</span> Agent Specifications <div class="section-line"></div></div>
+      <div class="agents-grid">
+        <div class="agent-card" data-num="1">
+          <div class="agent-icon">🧩</div>
+          <div class="agent-name">Context Builder Agent</div>
+          <div class="agent-desc">Uses a structured output LangChain chain with a Pydantic schema to parse raw input into clean idea fields. Runs clarifying sub-prompts for ambiguous entries before passing state forward.</div>
+          <div class="agent-outputs"><span class="aout">target_users</span><span class="aout">problem_statement</span><span class="aout">solution_summary</span></div>
+        </div>
+        <div class="agent-card" data-num="2">
+          <div class="agent-icon">📊</div>
+          <div class="agent-name">Market Insight Agent</div>
+          <div class="agent-desc">RAG pipeline over Chroma/Pinecone vector store seeded with industry reports. Returns 3–5 grounded insights with source citations. Focuses on demand signals, not speculative forecasts.</div>
+          <div class="agent-outputs"><span class="aout">industry_overview</span><span class="aout">demand_signals</span><span class="aout">trend_summary</span></div>
+        </div>
+        <div class="agent-card" data-num="3">
+          <div class="agent-icon">🗺️</div>
+          <div class="agent-name">Competitor Mapping Agent</div>
+          <div class="agent-desc">Combines Tavily web search tool with a vector store of startup profiles. Returns a competitor table with differentiator scoring and a positioning matrix suggestion.</div>
+          <div class="agent-outputs"><span class="aout">competitor_list</span><span class="aout">positioning_gaps</span><span class="aout">differentiation</span></div>
+        </div>
+        <div class="agent-card" data-num="4">
+          <div class="agent-icon">🧱</div>
+          <div class="agent-name">Business Structuring Agent</div>
+          <div class="agent-desc">Generates a lean canvas with 9 blocks populated by prior agent state. Offers 2–3 alternative revenue model paths with short trade-off analysis for each. Output is structured JSON mapped to the UI.</div>
+          <div class="agent-outputs"><span class="aout">lean_canvas</span><span class="aout">revenue_models</span><span class="aout">value_props</span></div>
+        </div>
+        <div class="agent-card" data-num="5">
+          <div class="agent-icon">⚠️</div>
+          <div class="agent-name">Risk & Assumption Analyzer</div>
+          <div class="agent-desc">The most important agent. Generates a structured risk matrix and assumption list. Each item tagged: Risk Type (Market / Tech / Execution / Regulatory), Severity, and a recommended experiment to de-risk it.</div>
+          <div class="agent-outputs"><span class="aout">risk_matrix</span><span class="aout">assumption_log</span><span class="aout">experiments</span></div>
+        </div>
+        <div class="agent-card" data-num="6">
+          <div class="agent-icon">🎤</div>
+          <div class="agent-name">Pitch & Communication Agent</div>
+          <div class="agent-desc">Final synthesis layer. Generates three pitch formats: one-liner, 30-second spoken script, and a 5-slide outline. Adapts tone based on audience input (investor / customer / hackathon judge).</div>
+          <div class="agent-outputs"><span class="aout">one_liner</span><span class="aout">pitch_script</span><span class="aout">slide_outline</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUTPUTS -->
+    <div>
+      <div class="section-label"><span>04</span> Deliverable Artifacts <div class="section-line"></div></div>
+      <div class="output-grid">
+        <div class="output-card">
+          <div class="output-card-icon">// artifact 01</div>
+          <div class="output-card-title">Startup Insight Report</div>
+          <ul class="output-card-items">
+            <li>Structured idea description</li>
+            <li>Market overview + signals</li>
+            <li>Competitor landscape</li>
+            <li>Business model suggestions</li>
+            <li>Risk & assumption breakdown</li>
+            <li>Full SWOT analysis</li>
+          </ul>
+        </div>
+        <div class="output-card">
+          <div class="output-card-icon">// artifact 02</div>
+          <div class="output-card-title">MVP Planning Guide</div>
+          <ul class="output-card-items">
+            <li>Core feature prioritization</li>
+            <li>MoSCoW framework applied</li>
+            <li>Tech stack suggestion</li>
+            <li>Development phase roadmap</li>
+            <li>Metric targets for MVP</li>
+            <li>Validation experiment plan</li>
+          </ul>
+        </div>
+        <div class="output-card">
+          <div class="output-card-icon">// artifact 03</div>
+          <div class="output-card-title">Pitch Draft</div>
+          <ul class="output-card-items">
+            <li>One-sentence pitch</li>
+            <li>30–60 second script</li>
+            <li>5-slide deck outline</li>
+            <li>Problem → Solution hook</li>
+            <li>Audience-adaptive tone</li>
+            <li>Call-to-action variants</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TECH STACK -->
+    <div>
+      <div class="section-label"><span>05</span> Technical Architecture <div class="section-line"></div></div>
+      <div class="stack-grid">
+        <div class="stack-card">
+          <div class="stack-heading">// AI & Orchestration</div>
+          <div class="stack-items">
+            <div class="stack-item"><div class="stack-dot"></div>LangGraph — stateful agent workflow graph</div>
+            <div class="stack-item"><div class="stack-dot"></div>LangChain — chain primitives & tool use</div>
+            <div class="stack-item"><div class="stack-dot"></div>OpenAI GPT-4o — primary reasoning model</div>
+            <div class="stack-item"><div class="stack-dot"></div>Tavily Search — live web search tool</div>
+            <div class="stack-item"><div class="stack-dot green"></div>Chroma / Pinecone — vector store for RAG</div>
+            <div class="stack-item"><div class="stack-dot green"></div>LangSmith — tracing & observability</div>
+          </div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-heading">// Backend & API</div>
+          <div class="stack-items">
+            <div class="stack-item"><div class="stack-dot"></div>Python 3.11+</div>
+            <div class="stack-item"><div class="stack-dot"></div>FastAPI — REST + WebSocket endpoints</div>
+            <div class="stack-item"><div class="stack-dot"></div>PostgreSQL — user sessions & idea history</div>
+            <div class="stack-item"><div class="stack-dot green"></div>Redis — job queue for async agent runs</div>
+            <div class="stack-item"><div class="stack-dot green"></div>Docker + Docker Compose — deployment</div>
+          </div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-heading">// Frontend</div>
+          <div class="stack-items">
+            <div class="stack-item"><div class="stack-dot"></div>React 18 + TypeScript</div>
+            <div class="stack-item"><div class="stack-dot"></div>Tailwind CSS — utility-first styling</div>
+            <div class="stack-item"><div class="stack-dot"></div>React Flow — LangGraph visual diagram</div>
+            <div class="stack-item"><div class="stack-dot green"></div>Recharts — risk matrix & SWOT charts</div>
+            <div class="stack-item"><div class="stack-dot green"></div>Streaming SSE — real-time agent progress</div>
+          </div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-heading">// Memory & State</div>
+          <div class="stack-items">
+            <div class="stack-item"><div class="stack-dot"></div>LangGraph checkpointing — graph persistence</div>
+            <div class="stack-item"><div class="stack-dot"></div>SQLite (dev) / Postgres (prod) for history</div>
+            <div class="stack-item"><div class="stack-dot green"></div>Vector DB — semantic search across past ideas</div>
+            <div class="stack-item"><div class="stack-dot green"></div>Iteration loop — re-run on refined input</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROMPT BLOCK -->
+    <div>
+      <div class="section-label"><span>06</span> Generation Prompt <div class="section-line"></div></div>
+      <div class="prompt-block">
+        <div class="prompt-section-title">// master prompt — paste this to generate the full application</div>
+        <div class="prompt-text">
+          <strong>Build a full-stack, production-grade AI-Assisted Startup Insight & Planning System</strong> using <em>LangChain</em> and <em>LangGraph</em>. This is a multi-agent reasoning pipeline — not a simple chatbot — that takes a raw startup idea as input and produces three structured output artifacts: a Startup Insight Report, an MVP Planning Guide, and a Pitch Draft.<br><br>
+
+          <strong>Architecture requirements:</strong><br>
+          Implement a LangGraph <em>StateGraph</em> with a shared <em>TypedDict</em> state object that flows through 6 sequential agent nodes: <em>context_builder → market_insight → competitor_mapper → business_structurer → risk_analyzer → pitch_writer</em>. Each node must be a dedicated Python class with its own LangChain chain, system prompt, and output schema (Pydantic models). Use <em>conditional_edge</em> routing to allow the context builder to loop back if the idea is too vague (missing target_user, problem, or solution fields). Add a <em>human-in-the-loop</em> interrupt after the context builder so founders can confirm or correct the structured interpretation before analysis begins.<br><br>
+
+          <strong>Agent-by-agent specifications:</strong><br>
+          (1) <em>Context Builder</em> — use GPT-4o with structured output and a Pydantic schema with fields: idea_title, problem_statement, target_users, proposed_solution, industry_vertical, geography. If any required field is null, emit a clarifying question and loop. (2) <em>Market Insight Agent</em> — use RAG over a Chroma vector store seeded with 50+ industry reports. Return 3–5 grounded insights with source tags. Prefix all outputs with a confidence tier [HIGH / MED / LOW]. (3) <em>Competitor Mapper</em> — call Tavily search tool with the idea's industry_vertical + problem keywords. Parse results into a competitor table: name, stage, differentiator, threat_level. Suggest two positioning gaps. (4) <em>Business Structurer</em> — populate a full 9-block Lean Canvas JSON object. Offer two alternative revenue model paths with a short trade-off paragraph each. (5) <em>Risk Analyzer</em> — generate a structured risk_matrix list: each item has risk_type, description, severity (1–5), and recommended_experiment to de-risk. Also produce an assumption_log with 5–7 critical assumptions ranked by uncertainty. (6) <em>Pitch Writer</em> — synthesize all prior state into: one_liner (max 20 words), spoken_script_30s, spoken_script_60s, slide_outline (5 slides with titles + bullet points), and audience_adaptation_notes for investor / customer / hackathon contexts.<br><br>
+
+          <strong>Backend API:</strong> FastAPI with a <em>/analyze</em> POST endpoint that accepts idea text and streams agent progress via Server-Sent Events. Each agent emits a <em>progress_event</em> with stage, status, and partial output as it completes. Store completed analyses in PostgreSQL with a UUID session ID. Expose a <em>/history/{session_id}</em> GET endpoint to retrieve past analyses. Add a <em>/refine</em> POST endpoint that loads a prior LangGraph checkpoint and re-runs with updated founder input.<br><br>
+
+          <strong>Frontend UI:</strong> React 18 + TypeScript single-page application. The main screen has three panels: (A) an idea input form with a progress tracker showing the LangGraph pipeline as a live animated node graph (use React Flow — nodes turn green as agents complete), (B) a tabbed results panel with one tab per artifact (Insight Report / MVP Guide / Pitch Draft), and (C) an iteration sidebar where founders can refine specific sections and re-trigger individual agents. Stream agent output in real-time using EventSource. Render the Lean Canvas as an interactive 9-block grid. Render the risk matrix as a 2D scatter plot (severity × likelihood) using Recharts. Export all three artifacts to PDF using <em>react-pdf</em>.<br><br>
+
+          <strong>Memory & iteration:</strong> Use LangGraph's built-in <em>SqliteSaver</em> checkpointer (dev) or <em>PostgresSaver</em> (prod) to persist graph state by session UUID. When a founder submits a refined idea, load the checkpoint, update the state, and resume from the first affected node — do not re-run agents whose upstream inputs have not changed. Embed completed idea schemas in the vector store so the system can surface semantically similar past analyses.<br><br>
+
+          <strong>Extra features to implement:</strong> (1) A <em>LangGraph workflow visualizer</em> component in the UI that renders the actual graph topology (nodes, edges, conditional branches) as a React Flow diagram — not a static image, but a live graph that highlights the currently executing node in real time. (2) A <em>confidence score</em> display on every insight: a colored badge (green / amber / red) with an explanation tooltip showing which data sources grounded the claim. (3) A <em>SWOT analysis section</em> in the Insight Report tab, rendered as a 2×2 grid with color-coded quadrants. (4) A <em>comparison mode</em> that loads two past analyses side-by-side for founders iterating on idea pivots.<br><br>
+
+          <strong>Code quality requirements:</strong> Full type annotations throughout Python and TypeScript. Async FastAPI endpoints. Pydantic v2 schemas for all agent outputs. Environment-variable-based configuration (no hardcoded keys). Docker Compose setup with services for api, frontend, postgres, redis, and chromadb. A comprehensive <em>README.md</em> with architecture diagram, setup instructions, and example curl commands. Unit tests for each agent node using <em>pytest</em> and <em>langchain's testing utilities</em>. LangSmith tracing enabled in production for full pipeline observability.<br><br>
+
+          <strong>Design philosophy:</strong> The system must never claim to validate or guarantee startup success. Every output must be framed as "structured insight to support decision-making." This framing should be visible in the UI (a persistent disclaimer banner), in agent system prompts, and in the generated reports themselves. The goal is a tool that impresses with its depth and honesty — not one that tells founders what they want to hear.
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div>
+      <div class="section-label"><span>07</span> Standout Features <div class="section-line"></div></div>
+      <div class="features-grid">
+        <div class="feature-row">
+          <div class="feature-check"></div>
+          <div class="feature-text"><strong>Live graph visualization</strong> — React Flow renders the LangGraph topology in real time, highlighting the active node as agents execute</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-check"></div>
+          <div class="feature-text"><strong>Confidence tiers on every insight</strong> — HIGH / MED / LOW badges with source attribution and explanation tooltips throughout the report</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-check"></div>
+          <div class="feature-text"><strong>Human-in-the-loop checkpoint</strong> — founders confirm the structured idea interpretation before the analysis pipeline runs</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-check"></div>
+          <div class="feature-text"><strong>Selective re-run on refinement</strong> — LangGraph checkpointing means only affected downstream nodes re-execute when input changes</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-check"></div>
+          <div class="feature-text"><strong>Idea memory via vector DB</strong> — past analyses are embedded and surfaced when a new idea is semantically similar to a prior one</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-check"></div>
+          <div class="feature-text"><strong>Side-by-side pivot comparison</strong> — load two analysis sessions and compare outputs column-by-column for structured pivot reasoning</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-check"></div>
+          <div class="feature-text"><strong>Audience-adaptive pitch generation</strong> — the pitch agent adapts tone and emphasis for investor, customer, or hackathon judge audiences</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-check"></div>
+          <div class="feature-text"><strong>LangSmith observability</strong> — full pipeline tracing, latency breakdown per agent, and token usage dashboards in production</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">startup-insight-system · spec v1.0 · LangChain + LangGraph</div>
+    <div class="footer-right">
+      <span class="footer-badge">Python 3.11</span>
+      <span class="footer-badge">React 18</span>
+      <span class="footer-badge">FastAPI</span>
+    </div>
+  </div>
+
+</div>
